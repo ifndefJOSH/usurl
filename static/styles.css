@@ -35,7 +35,7 @@ body {
 	width: calc(100vw - 60px);
 }
 
-#url {
+#url, #url-input, .url {
 	display: block;
 	width: 85%;
 	padding: 20px;
@@ -53,6 +53,7 @@ body {
 	background-color: #00263A;
 	text-decoration: none;
 	margin-top: 20px;
+	border: 0px;
 }
 
 .button:hover {

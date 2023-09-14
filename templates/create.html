@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} Create Shortened URL {% endblock %}
+
+{% block content %}
+
+<div id="create-shortened-url">
+<h1> Create Shortened URL </h1>
+<form>
+	<input type="text" id="url-input" name="url" placeholder="Full URL: https://www.example.com">
+	<input type="submit" class=button value="Create URL" onclick="createUrl()">
+</form>
+</div>
+<div id="shortened-url" style="display: none;">
+<h1>Your shortened URL is:</h1>
+<div id=url></div>
+</div>
+
+<script>
+function createUrl() {
+
+}
+</script>
+
+{% endblock %}
