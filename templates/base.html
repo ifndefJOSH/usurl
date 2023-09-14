@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<head>
+	<title>{% block title %} {% endblock %} - Utah State University</title>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+	<div id=navbar>
+		<img src=https://www.usu.edu/assets/bs4/images/logos/u-state-logo.svg />
+		<span id=title>USU URL Shortener</span>
+	</div>
+	<div id=content>
+		{% block content %}{% endblock %}
+	</div>
+	<div id=footer>
+		Proudly made (and hosted) by members of the <a href="https://linux.usu.edu">Free Software and Linux Club.</a>
+	</div>
+</body>

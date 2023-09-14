@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Noto+Sans+Mono&family=Noto+Sans:wght@400;600;800&display=swap');
+
+#navbar, #footer {
+	display: block;
+	width: 100%;
+	color: white;
+	background-color: #0a0a3b;
+	padding: 20px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+#footer {
+	text-align: center;
+}
+
+body {
+	margin: 0px;
+	font-family: 'Roboto', 'Noto Sans', sans-serif;
+}
+
+#title {
+	display: inline-block;
+	font-weight: bold;
+	padding-left: 20px;
+	font-size: 18pt;
+}
+
+#content {
+	padding: 30px;
+	margin: 0px;
+	display: block;
+	min-height: 80vh;
+	width: calc(100vw - 60px);
+}
+
+#url {
+	display: block;
+	width: 85%;
+	padding: 20px;
+	font-family: 'Noto Sans Mono', monospace;
+	border: 1px solid;
+	margin-top: 20px;
+	border-radius: 20px;
+}
+
+.button {
+	display: inline-block;
+	padding: 20px;
+	border-radius: 20px;
+	color: white;
+	background-color: #00263A;
+	text-decoration: none;
+	margin-top: 20px;
+}
+
+.button:hover {
+	background-color: #1d4d6d;
+	cursor: pointer;
+}
+
+#footer a {
+	text-decoration: none;
+	display: inline-block;
+	margin-left: 5px;
+	color: #CCCCCC;
+}
+
+#footer a:hover {
+	color: #41adf5;
+}

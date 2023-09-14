@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %} Redirect Warning {% endblock %}
+
+{% block content %}
+
+<h1> WARNING: REDIRECT </h1>
+
+<p>You are being redirected to a site that is <i>not</i> affiliated with USU. We do not monitor the content of these redirect links, so it is your responsibility to inspect the URL and ensure it is something you trust.</p>
+
+<p>This URL shortener is open to anyone with an A-number, so this redirect may not have been setup by a trustworthy party.</p>
+
+<p>Redirected URL<p>
+
+<div id=url>
+{{ url }}
+</div>
+
+<a class=button href="{{ url }}">I trust this URL</a>
+
+<p>If you do not trust the URL, you can safely close this page.</p>
+
+{% endblock %}
