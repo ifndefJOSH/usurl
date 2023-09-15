@@ -9,7 +9,8 @@ except KeyError:
 	RESOURCE_ROOT = os.getcwd()
 
 TEMPLATE_DIRECTORY = f"{RESOURCE_ROOT}/templates"
-STATIC_DIRECTORY = f"{RESOURCE_ROOT}/static"
+STATIC_DIRECTORY   = f"{RESOURCE_ROOT}/static"
+DATABASE_FILE      = f"{RESOURCE_ROOT}/database.db"
 
 try:
 	GOOGLE_SAFEBROWSING_API_KEY = os.environ["GOOGLE_SAFEBROWSING_API_KEY"]
@@ -68,6 +69,14 @@ def create_shortened_url():
 
 @app.get("/l/<uid>")
 def get_redirect_page(uid):
+	connection = sqlite3.connect(DATABASE_FILE)
+	curs = connection.cursor()
+	# Python's sqlite module sanitizes input automatically if you use
+	# this syntax
+	result = curs.execute("select url from redirects where id = ?", (uid,)).fetchone()
+	connection.commit()
+	if result is None:
+		return render_template("error.html", error_body=f"The link ID {uid} is not in our database")
 	url = "https://kernel.org"
 	return render_template("redirect.html", url=url)
 
