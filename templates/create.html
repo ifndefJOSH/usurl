@@ -4,22 +4,46 @@
 
 {% block content %}
 
-<div id="create-shortened-url">
-<h1> Create Shortened URL </h1>
-<form>
-	<input type="text" id="url-input" name="url" placeholder="Full URL: https://www.example.com">
-	<input type="submit" class=button value="Create URL" onclick="createUrl()">
-</form>
+{% if error %}
+
+<div class="error" id=error>
+	<b>Error:</b>
+	<span id=error-body>{{ error_body }}</span>
 </div>
-<div id="shortened-url" style="display: none;">
+
+{% endif %}
+
+{% if created %}
+
+<div id="shortened-url">
 <h1>Your shortened URL is:</h1>
-<div id=url></div>
-</div>
-
+<div id=url>{{ url }}</div>
 <script>
-function createUrl() {
-
+function copyUrl() {
+	try {
+		navigator.clipboard.writeText(document.getElementById("url").innerHTML);
+		alert("Copied");
+	}
+	catch (e) {
+		alert("Failed to copy text.");
+	}
 }
 </script>
+<button class=button onclick="copyUrl()">Copy</button>
+
+<p>Users who visit your URL will see a disclaimer page indicating that the site you have shortened is not affiliated with USU.</p>
+</div>
+
+{% else %}
+
+<div id="create-shortened-url">
+<h1> Create Shortened URL </h1>
+<form action="/create" method="POST">
+	<input type="text" id="url-input" name="url" placeholder="Full URL: https://www.example.com">
+	<button class=button value="Create URL">Create URL</button>
+</form>
+</div>
+
+{% endif %}
 
 {% endblock %}

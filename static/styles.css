@@ -71,3 +71,11 @@ body {
 #footer a:hover {
 	color: #41adf5;
 }
+
+#error, .error {
+	display: block;
+	background-color: #FF444499;
+	padding: 30px;
+	margin-bottom: 30px;
+	border-radius: 20px;
+}
