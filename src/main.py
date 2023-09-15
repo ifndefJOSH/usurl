@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, Response, render_template, send_from_directory
 import sqlite3, base64, os, json, secrets
 import requests # For Google's safebrowsing API
-from urlparse import urlparse
+import validators
 
 try:
 	RESOURCE_ROOT = os.environ["RESOURCE_ROOT"]
@@ -39,10 +39,12 @@ def get_client_ip():
 	return request.environ["HTTP_X_FORWARDED_FOR"]
 
 def validate_url(url):
-	if GOOGLE_SAFEBROWSING_API_KEY is None:
+	if not validators.url(url):
+		return False, "Malformed URL"
+	elif GOOGLE_SAFEBROWSING_API_KEY is None:
 		print(f"[WARNING]: Cannot check safebrowsing for {url}!")
-		return True
-	return True # TODO
+		return True, "Cannot check for malware"
+	return True, "TODO" # TODO
 
 @app.get("/")
 @app.get("/create")
@@ -54,9 +56,12 @@ def create_shortened_url():
 	# Support JSON and form
 	body = request.form
 	if not "url" in body or body["url"].strip() == "":
-		render_template("create.html", url=None, created=False, error=True, error_body="'url' field in request was empty!")
+		return render_template("create.html", url=None, created=False, error=True, error_body="'url' field in request was empty!")
 	long_url = body["url"]
-	print(type(long_url))
+	valid_url, message = validate_url(long_url)
+	print(valid_url, message)
+	if not valid_url:
+		return render_template("create.html", url=None, created=False, error=True, error_body=message)
 	print(f"[MESSAGE] Creating short url for '{long_url}'")
 	url = "https://kernel.org"
 	return render_template("create.html", url=url, created=True, error=False)

@@ -4,6 +4,37 @@
 
 {% block content %}
 
+<noscript>
+<div class="error" id=error>
+	JavaScript is recommended to be enabled.
+</div>
+</noscript>
+
+<script>
+/** I would love to use a set, but they don't store well in localStorage **/
+function redirectTrusted() {
+	var trustedUrls = JSON.parse(localStorage.getItem("trusted-urls"));
+	if (trustedUrls == null || trustedUrls == undefined) {
+		return;
+	}
+	if (trustedUrls.includes("{{ url }}")) {
+		console.log("Redirecting to {{ url }}");
+		window.location = "{{ url }}";
+	}
+}
+
+function trustThisUrl(url) {
+	var trustedUrls = JSON.parse(localStorage.getItem("trusted-urls"));
+	if (trustedUrls == null || trustedUrls == undefined) {
+		trustedUrls = [];
+	}
+	trustedUrls.push(url);
+	trustedUrls.push("https://usu.edu");
+	localStorage.setItem("trusted-urls", JSON.stringify(trustedUrls));
+	window.location = url;
+}
+</script>
+
 <h1> WARNING: REDIRECT </h1>
 
 <p>You are being redirected to a site that is <i>not</i> affiliated with USU. We do not monitor the content of these redirect links, so it is your responsibility to inspect the URL and ensure it is something you trust.</p>
@@ -16,8 +47,10 @@
 {{ url }}
 </div>
 
-<a class=button href="{{ url }}">I trust this URL</a>
+<a class=button href="{{ url }}">I trust this URL</a> <a onclick="trustThisUrl('{{ url }}')">Do not warn me about this URL again.</a>
 
 <p>If you <b><i>do not trust</b></i> the URL, you should close this page.</p>
+
+<script>redirectTrusted();</script>
 
 {% endblock %}
