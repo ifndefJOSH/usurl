@@ -26,10 +26,9 @@ function redirectTrusted() {
 function trustThisUrl(url) {
 	var trustedUrls = JSON.parse(localStorage.getItem("trusted-urls"));
 	if (trustedUrls == null || trustedUrls == undefined) {
-		trustedUrls = [];
+		trustedUrls = ["https://usu.edu"];
 	}
 	trustedUrls.push(url);
-	trustedUrls.push("https://usu.edu");
 	localStorage.setItem("trusted-urls", JSON.stringify(trustedUrls));
 	window.location = url;
 }
