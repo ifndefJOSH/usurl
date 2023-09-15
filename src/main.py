@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, Response, render_template, send_from_
 import sqlite3, base64, os, json, secrets
 import requests # For Google's safebrowsing API
 import validators
+from urllib.parse import urljoin
 
 try:
 	RESOURCE_ROOT = os.environ["RESOURCE_ROOT"]
@@ -25,10 +26,19 @@ app = Flask(
 	, template_folder=TEMPLATE_DIRECTORY
 )
 
+def init_db():
+	connection = sqlite3.connect(DATABASE_FILE)
+	with open(f"{RESOURCE_ROOT}/schema.sql") as schema:
+		connection.executescript(schema.read())
+
+# Init database on every run
+if not "NO_CLEAR_DATABASE" in os.environ:
+	init_db()
+
 def gen_uid(curs):
 	uid = secrets.token_urlsafe(8)
 	# Ensure uniqueness
-	while curs.execute("select * from redirects where id = ?", uid).fetchone() is not None:
+	while curs.execute("select * from redirects where lid = ?", (uid,)).fetchone() is not None:
 		uid = secrets.token_urlsafe(8)
 	return uid
 
@@ -64,7 +74,12 @@ def create_shortened_url():
 	if not valid_url:
 		return render_template("create.html", url=None, created=False, error=True, error_body=message)
 	print(f"[MESSAGE] Creating short url for '{long_url}'")
-	url = "https://kernel.org"
+	connection = sqlite3.connect(DATABASE_FILE)
+	curs = connection.cursor()
+	uid = gen_uid(curs)
+	url = urljoin(request.url_root, f"/l/{uid}")
+	curs.execute("insert into redirects (url, lid) values (?, ?)", (long_url, uid,))
+	connection.commit()
 	return render_template("create.html", url=url, created=True, error=False)
 
 @app.get("/l/<uid>")
@@ -73,10 +88,10 @@ def get_redirect_page(uid):
 	curs = connection.cursor()
 	# Python's sqlite module sanitizes input automatically if you use
 	# this syntax
-	result = curs.execute("select url from redirects where id = ?", (uid,)).fetchone()
+	result = curs.execute("select url from redirects where lid = ?", (uid,)).fetchone()
 	connection.commit()
 	if result is None:
 		return render_template("error.html", error_body=f"The link ID {uid} is not in our database")
-	url = "https://kernel.org"
+	url = result[0]
 	return render_template("redirect.html", url=url)
 
