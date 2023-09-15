@@ -25,6 +25,8 @@ body {
 	font-weight: bold;
 	padding-left: 20px;
 	font-size: 18pt;
+	text-decoration: none;
+	color: white;
 }
 
 #content {
