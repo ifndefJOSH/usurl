@@ -8,7 +8,6 @@ create table redirects(
 	, url text key -- when we migrate to pgsql some other varchar
 	, ip not null  -- the IP address of the user who created the URL
 	, created timestamp not null default current_timestamp
-	,
 );
 
 -- Table where people can report bad links by ID

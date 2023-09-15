@@ -79,7 +79,7 @@ def create_shortened_url():
 	uid = gen_uid(curs)
 	url = urljoin(request.url_root, f"/l/{uid}")
 	ip = get_client_ip()
-	curs.execute("insert into redirects (url, lid, ip) values (?, ?)", (long_url, uid, ip,))
+	curs.execute("insert into redirects (url, lid, ip) values (?, ?, ?)", (long_url, uid, ip,))
 	connection.commit()
 	return render_template("create.html", url=url, created=True, error=False)
 
